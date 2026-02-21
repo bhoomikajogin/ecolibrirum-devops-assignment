@@ -23,7 +23,7 @@ pipeline {
           [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-sandbox-creds']
         ]) {
           sh '''
-            terraform -chdir=terraform init -input=false
+            terraform -chdir=terraform init -migrate-state -input=false
           '''
         }
       }

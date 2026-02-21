@@ -1,41 +1,20 @@
 pipeline {
   agent any
 
-  options {
-    timestamps()
-  }
-
   stages {
-    stage('Checkout') {
+    stage('Terraform Plan') {
       steps {
-        echo 'Checking out source code...'
+        withCredentials([
+          [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-sandbox-creds'],
+          string(credentialsId: 'aws-session-token', variable: 'AWS_SESSION_TOKEN')
+        ]) {
+          sh '''
+            export AWS_REGION=us-east-1
+            terraform -chdir=terraform init
+            terraform -chdir=terraform plan
+          '''
+        }
       }
-    }
-
-    stage('Environment Info') {
-      steps {
-        sh '''
-          echo "Node Name: $(hostname)"
-          echo "Workspace: $WORKSPACE"
-          java -version || true
-          docker --version || true
-        '''
-      }
-    }
-
-    stage('Smoke Test') {
-      steps {
-        echo 'Jenkins pipeline from SCM is working successfully!'
-      }
-    }
-  }
-
-  post {
-    success {
-      echo 'Pipeline completed successfully.'
-    }
-    failure {
-      echo 'Pipeline failed.'
     }
   }
 }

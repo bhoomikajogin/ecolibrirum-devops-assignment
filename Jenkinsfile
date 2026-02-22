@@ -106,11 +106,17 @@ pipeline {
 
     stage('Helm Deploy') {
       steps {
-        sh '''
-          helm upgrade --install eks-demo ./eks-demo-chart \
-            --set image.repository=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.${AWS_REGION}.amazonaws.com/eks-demo-app \
-            --set image.tag=${BUILD_NUMBER}
-        '''
+        withCredentials([
+          [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-sandbox-creds']
+        ]) {
+          sh '''
+            aws eks update-kubeconfig --region ${AWS_REGION} --name demo-eks-cluster
+            ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+            helm upgrade --install eks-demo ./eks-demo-chart \
+              --set image.repository=$ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/eks-demo-app \
+              --set image.tag=${BUILD_NUMBER}
+          '''
+        }
       }
     }
   }

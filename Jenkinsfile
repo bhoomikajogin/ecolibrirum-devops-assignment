@@ -53,11 +53,10 @@ pipeline {
       }
     }
     stage('Terraform Apply') {
-        steps {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-sandbox-creds']]) {
             dir('terraform') {
-                sh '''
-                    terraform apply -auto-approve
-                '''
+                sh 'terraform init'
+                sh 'terraform apply -auto-approve'
             }
         }
     }

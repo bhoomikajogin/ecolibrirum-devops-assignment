@@ -115,6 +115,13 @@ pipeline {
             helm upgrade --install eks-demo ./eks-demo-chart \
               --set image.repository=$ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/eks-demo-app \
               --set image.tag=${BUILD_NUMBER}
+
+            echo "Waiting for ingress address..."
+            sleep 20
+            INGRESS=$(kubectl get ingress eks-demo-eks-demo-chart -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            echo "========================================="
+            echo "Application URL: http://$INGRESS"
+            echo "========================================="
           '''
         }
       }

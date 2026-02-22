@@ -282,8 +282,6 @@ kubectl get ingress
 
 ## Screenshots
 
-> Add screenshots below after deployment.
-
 ### Jenkins Pipeline — Successful Run
 ![Jenkins Pipeline](screenshots/jenkins-pipeline.png)
 

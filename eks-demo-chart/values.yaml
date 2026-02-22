@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 904557616759.dkr.ecr.us-east-1.amazonaws.com/eks-demo-app
-  tag: latest
+  tag: ""
   pullPolicy: Always
 
 service:

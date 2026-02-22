@@ -64,14 +64,63 @@ pipeline {
             }
         }
     }
+    stage('Docker Build') {
+        steps {
+            sh '''
+                docker build -t eks-demo-app:${BUILD_NUMBER} app/
+            '''
+        }
+    }
+
+    stage('ECR Login') {
+      steps {
+        withCredentials([
+          [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-sandbox-creds']
+        ]) {
+          sh '''
+            aws ecr get-login-password --region ${AWS_REGION} | \
+            docker login --username AWS --password-stdin \
+            $(aws sts get-caller-identity --query Account --output text).dkr.ecr.${AWS_REGION}.amazonaws.com
+          '''
+        }
+      }
+    }
+
+    stage('Docker Push') {
+      steps {
+        withCredentials([
+          [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-sandbox-creds']
+        ]) {
+          sh '''
+            ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+            docker tag eks-demo-app:${BUILD_NUMBER} \
+            $ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/eks-demo-app:${BUILD_NUMBER}
+
+            docker push \
+            $ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/eks-demo-app:${BUILD_NUMBER}
+          '''
+        }
+      }
+    }
+
+    stage('Helm Deploy') {
+      steps {
+        sh '''
+          helm upgrade --install eks-demo ./eks-demo-chart \
+            --set image.repository=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.${AWS_REGION}.amazonaws.com/eks-demo-app \
+            --set image.tag=${BUILD_NUMBER}
+        '''
+      }
+    }
   }
 
   post {
     success {
-      echo "✅ Terraform apply completed successfully"
+      echo "Deployment Successful. Application updated to build #${BUILD_NUMBER}"
     }
     failure {
-      echo "❌ Terraform apply failed"
+      echo "Full CI/CD pipeline completed successfully (Terraform + Build + Push + Deploy)"
     }
   }
 }

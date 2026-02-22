@@ -4,7 +4,7 @@ const os = require('os');
 
 const PORT = process.env.PORT || 3000;
 const MESSAGE = process.env.MESSAGE || "Hello from EKS!";
-const VERSION = process.env.VERSION || "v1";
+const STACK = process.env.STACK || "v1";
 
 const html = `<!DOCTYPE html>
 <html lang="en">
@@ -179,7 +179,7 @@ const html = `<!DOCTYPE html>
       font-family: var(--mono);
       font-size: 14px;
       color: var(--accent);
-      word-break: break-all;
+      word-break: break-word;
     }
 
     .card-value.purple { color: var(--accent2); }
@@ -221,8 +221,8 @@ const html = `<!DOCTYPE html>
         <div class="card-value">${MESSAGE}</div>
       </div>
       <div class="card">
-        <div class="card-label">Version</div>
-        <div class="card-value purple">${VERSION}</div>
+        <div class="card-label">stack</div>
+        <div class="card-value purple">${STACK}</div>
       </div>
       <div class="card wide">
         <div class="card-label">Hostname (Pod)</div>
@@ -245,7 +245,7 @@ app.get('/', (req, res) => {
 app.get('/api', (req, res) => {
   res.json({
     message: MESSAGE,
-    version: VERSION,
+    stack: STACK,
     hostname: os.hostname()
   });
 });

@@ -23,8 +23,8 @@ spec:
           env:
             - name: MESSAGE
               value: "{{ .Values.env.MESSAGE }}"
-            - name: VERSION
-              value: "{{ .Values.env.VERSION }}"
+            - name: STACK
+              value: "{{ .Values.env.STACK }}"
           volumeMounts:
             - name: config-volume
               mountPath: /app/config

@@ -151,7 +151,7 @@ pipeline {
       echo "Deployment Successful. Application updated to build #${BUILD_NUMBER}"
     }
     failure {
-      echo "Full CI/CD pipeline completed successfully (Terraform + Build + Push + Deploy)"
+      echo "Deployment failed at build #${BUILD_NUMBER}. Investigate logs"
     }
   }
 }

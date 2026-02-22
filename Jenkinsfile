@@ -52,14 +52,23 @@ pipeline {
         }
       }
     }
+    stage('Terraform Apply') {
+        steps {
+            dir('terraform') {
+                sh '''
+                    terraform apply -auto-approve
+                '''
+            }
+        }
+}
   }
 
   post {
     success {
-      echo "✅ Terraform smoke test successful"
+      echo "✅ Terraform apply completed successfully"
     }
     failure {
-      echo "❌ Terraform smoke test failed"
+      echo "❌ Terraform apply failed"
     }
   }
 }

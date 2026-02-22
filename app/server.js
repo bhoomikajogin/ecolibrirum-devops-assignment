@@ -130,8 +130,8 @@ const html = `<!DOCTYPE html>
     }
 
     .subtitle {
-      font-family: var(--mono);
-      font-size: 13px;
+      font-family: var(--sans);
+      font-size: 15px;
       color: var(--muted);
       margin-bottom: 36px;
       letter-spacing: 0.02em;
@@ -213,7 +213,7 @@ const html = `<!DOCTYPE html>
   <div class="container">
     <div class="badge">LIVE &nbsp;·&nbsp; EKS CLUSTER</div>
     <h1>EKS Demo App</h1>
-    <p class="subtitle">// deployed via helm · kubernetes · aws</p>
+    <p class="subtitle">Deployed via Helm · Kubernetes · AWS</p>
 
     <div class="cards">
       <div class="card">

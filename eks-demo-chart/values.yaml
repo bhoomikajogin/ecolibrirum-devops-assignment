@@ -23,7 +23,7 @@ ingress:
 
 env:
   MESSAGE: "Automating Infrastructure. Delivering Reliability."
-  STACK: "DevOps Engineer · AWS · EKS · Helm · Jenkins"
+  STACK: "DevOps Engineer · AWS · EKS · Helm · Jenkins · Terraform"
 
 config:
   appName: "eks-demo"

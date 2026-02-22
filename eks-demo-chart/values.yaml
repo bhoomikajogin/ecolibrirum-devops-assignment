@@ -22,8 +22,8 @@ ingress:
   tls: []
 
 env:
-  MESSAGE: "Hello from Helm"
-  VERSION: "v1"
+  MESSAGE: "Automating Infrastructure. Delivering Reliability."
+  VERSION: "DevOps Engineer · AWS · EKS · Helm · Jenkins"
 
 config:
   appName: "eks-demo"

@@ -13,8 +13,13 @@ service:
 ingress:
   enabled: true
   className: nginx
-  host: ""
-  path: /
+  annotations: {}
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
 
 env:
   MESSAGE: "Hello from Helm"
@@ -22,8 +27,6 @@ env:
 
 config:
   appName: "eks-demo"
-
-resources: {}
 
 livenessProbe:
   path: /health

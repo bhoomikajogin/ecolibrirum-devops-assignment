@@ -106,17 +106,20 @@ pipeline {
     }
 
     stage('Install Ingress Controller') {
-        steps {
+      steps {
+        withCredentials([
+          [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-sandbox-creds']
+        ]) {
           sh '''
+            aws eks update-kubeconfig --region ${AWS_REGION} --name demo-eks-cluster
             helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
             helm repo update
-
             helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-              --namespace ingress-nginx \
-              --create-namespace \
+              --namespace ingress-nginx --create-namespace \
               --set controller.publishService.enabled=true
           '''
         }
+      }
     }
 
     stage('Helm Deploy') {

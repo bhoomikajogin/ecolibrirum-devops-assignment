@@ -40,8 +40,24 @@ module "eks" {
     }
   }
 
+  access_entries = {
+    sandbox_admin = {
+        principal_arn = data.aws_caller_identity.current.arn
+        policy_associations = {
+            admin = {
+                policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+                access_scope = {
+                    type = "cluster"
+                }
+            }
+        }
+    }
+  }
+
   tags = {
     Environment = "sandbox"
     Terraform   = "true"
   }
 }
+
+data "aws_caller_identity" "current" {}
